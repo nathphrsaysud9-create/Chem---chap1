@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 1 – สารและสมบัติของสาร</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #111827;
+    --bg3: #1a2235;
+    --card: #151d2e;
+    --border: #1e3a5f;
+    --teal: #00e5cc;
+    --gold: #ffd166;
+    --coral: #ff6b6b;
+    --purple: #a78bfa;
+    --green: #34d399;
+    --blue: #60a5fa;
+    --text: #e2e8f0;
+    --muted: #8899aa;
+    --white: #ffffff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* FLOATING MOLECULES BG */
+  .molecules-bg {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .mol {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.04;
+    animation: floatMol linear infinite;
+  }
+  @keyframes floatMol {
+    0% { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    color: var(--teal);
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .nav-progress {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--muted);
+  }
+  .progress-bar-nav {
+    width: 120px; height: 4px;
+    background: var(--bg3);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill-nav {
+    height: 100%; background: var(--teal);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed; left:0; top:60px; bottom:0;
+    width: 220px; overflow-y: auto;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+    z-index: 90;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .sidebar-item:hover { color: var(--text); background: var(--bg3); }
+  .sidebar-item.active { color: var(--teal); border-left-color: var(--teal); background: rgba(0,229,204,0.05); }
+  .sidebar-item.done { color: var(--green); }
+  .sidebar-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .sidebar-item.active .sidebar-dot { background: var(--teal); }
+  .sidebar-item.done .sidebar-dot { background: var(--green); }
+  .sidebar-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; padding: 16px 16px 6px; }
+
+  /* MAIN */
+  .main {
+    margin-left: 220px;
+    padding-top: 60px;
+    min-height: 100vh;
+    position: relative; z-index: 1;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 60px 60px;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,229,204,0.1);
+    border: 1px solid rgba(0,229,204,0.3);
+    color: var(--teal);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: 48px; font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--teal); }
+  .hero p { font-size: 17px; color: var(--muted); max-width: 560px; line-height: 1.7; }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 60px 60px;
+  }
+  .topic-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .topic-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+  .topic-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .topic-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .topic-card p { font-size: 12px; color: var(--muted); }
+
+  /* SECTION */
+  .section-page {
+    display: none;
+    padding: 40px 60px;
+    max-width: 900px;
+  }
+  .section-page.active { display: block; }
+
+  .section-header {
+    display: flex; align-items: flex-start; gap: 20px;
+    margin-bottom: 36px; padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon-big {
+    width: 60px; height: 60px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 30px; font-weight: 800; margin-bottom: 6px; }
+  .section-header p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+  /* CONTENT CARDS */
+  .content-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .content-block h3 {
+    font-size: 18px; font-weight: 700;
+    color: var(--teal); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .content-block p { font-size: 15px; line-height: 1.85; color: var(--text); margin-bottom: 12px; }
+  .content-block p:last-child { margin-bottom: 0; }
+
+  .highlight-box {
+    background: rgba(0,229,204,0.07);
+    border: 1px solid rgba(0,229,204,0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-size: 14px; line-height: 1.8;
+  }
+  .highlight-box.gold {
+    background: rgba(255,209,102,0.07);
+    border-color: rgba(255,209,102,0.25);
+  }
+  .highlight-box.coral {
+    background: rgba(255,107,107,0.07);
+    border-color: rgba(255,107,107,0.25);
+  }
+  .highlight-box.purple {
+    background: rgba(167,139,250,0.07);
+    border-color: rgba(167,139,250,0.25);
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+  .info-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .info-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .info-card ul { list-style: none; padding: 0; }
+  .info-card ul li { font-size: 13px; color: var(--text); padding: 4px 0; padding-left: 16px; position: relative; }
+  .info-card ul li::before { content: '▸'; position: absolute; left: 0; color: var(--teal); }
+
+  /* TABLE */
+  .chem-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 14px 0;
+  }
+  .chem-table th {
+    background: var(--bg3);
+    color: var(--teal);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border);
+  }
+  .chem-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .chem-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* pH SCALE */
+  .ph-scale {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+  .ph-bar {
+    display: flex;
+    height: 40px;
+  }
+  .ph-segment {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: rgba(0,0,0,0.7);
+    cursor: default;
+    transition: transform 0.2s;
+  }
+  .ph-segment:hover { transform: scaleY(1.2); }
+  .ph-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 11px; color: var(--muted);
+    padding: 0 2px;
+  }
+  .ph-examples {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-top: 12px;
+  }
+  .ph-ex {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .ph-ex .ph-num { font-size: 20px; font-weight: 800; margin-bottom: 2px; }
+
+  /* SEPARATION METHODS */
+  .method-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 14px 0; }
+  .method-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+  }
+  .method-icon { font-size: 32px; margin-bottom: 10px; }
+  .method-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .method-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* QUIZ */
+  .quiz-section {
+    background: var(--bg2);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-top: 32px;
+  }
+  .quiz-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px;
+  }
+  .quiz-title {
+    font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .quiz-badge {
+    background: var(--gold);
+    color: #000;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .question-block {
+    margin-bottom: 24px;
+  }
+  .question-text {
+    font-size: 15px; font-weight: 600;
+    margin-bottom: 12px; line-height: 1.65;
+    color: var(--white);
+  }
+  .q-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px;
+    background: var(--teal); color: #000;
+    border-radius: 50%; font-size: 12px; font-weight: 700;
+    margin-right: 8px; flex-shrink: 0;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px; line-height: 1.5;
+  }
+  .option:hover { border-color: var(--teal); background: rgba(0,229,204,0.05); }
+  .option.selected { border-color: var(--teal); background: rgba(0,229,204,0.1); }
+  .option.correct { border-color: var(--green); background: rgba(52,211,153,0.1); color: var(--green); }
+  .option.wrong { border-color: var(--coral); background: rgba(255,107,107,0.1); color: var(--coral); }
+  .option-letter {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0; color: var(--muted);
+  }
+  .option.correct .option-letter { background: var(--green); color: #000; }
+  .option.wrong .option-letter { background: var(--coral); color: #000; }
+
+  /* OPEN-ENDED */
+  .open-question {
+    margin-bottom: 20px;
+  }
+  .open-q-text { font-size: 15px; font-weight: 600; margin-bottom: 8px; line-height: 1.65; }
+  .open-answer {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+  }
+  .open-answer:focus { outline: none; border-color: var(--teal); }
+  .answer-hint {
+    margin-top: 8px;
+    font-size: 12px; color: var(--muted);
+    font-style: italic;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px; border: none;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--teal); color: #000; }
+  .btn-primary:hover { background: #00ffdd; transform: translateY(-1px); }
+  .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+  .btn-gold { background: var(--gold); color: #000; }
+  .btn-gold:hover { background: #ffe080; transform: translateY(-1px); }
+
+  .quiz-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+
+  /* RESULT */
+  .quiz-result {
+    display: none;
+    background: var(--bg3);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .result-score { font-size: 42px; font-weight: 800; }
+  .result-label { font-size: 15px; color: var(--muted); margin-top: 4px; }
+  .result-msg { font-size: 15px; margin-top: 12px; line-height: 1.7; }
+
+  /* PRETEST PAGE */
+  #pretest-page {
+    padding: 40px 60px;
+    max-width: 800px;
+  }
+  .pretest-hero {
+    text-align: center; padding: 40px 0 36px;
+  }
+  .pretest-icon { font-size: 64px; margin-bottom: 16px; }
+  .pretest-hero h2 { font-size: 30px; font-weight: 800; margin-bottom: 10px; }
+  .pretest-hero p { color: var(--muted); font-size: 15px; line-height: 1.7; }
+
+  /* HOME PAGE */
+  #home-page { display: block; }
+
+  /* COMPLETION */
+  #complete-page {
+    display: none;
+    padding: 60px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .complete-icon { font-size: 80px; margin-bottom: 24px; }
+  .complete-title { font-size: 36px; font-weight: 800; margin-bottom: 12px; }
+  .complete-sub { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+  .score-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin: 24px 0;
+  }
+  .score-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .score-card .sc-num { font-size: 26px; font-weight: 800; color: var(--teal); }
+  .score-card .sc-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* ANIMATION */
+  @keyframes fadeInUp {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .section-page.active { animation: fadeInUp 0.4s ease; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .hero, .section-page, #pretest-page { padding: 24px 20px; }
+    .topic-grid { grid-template-columns: 1fr 1fr; padding: 0 20px 20px; }
+    .two-col, .method-grid, .score-cards { grid-template-columns: 1fr; }
+    .ph-examples { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* INDICATOR DOT DONE */
+  .done-check { color: var(--green); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px; font-weight: 600;
+    margin: 2px;
+  }
+  .tag-teal { background: rgba(0,229,204,0.15); color: var(--teal); }
+  .tag-gold { background: rgba(255,209,102,0.15); color: var(--gold); }
+  .tag-coral { background: rgba(255,107,107,0.15); color: var(--coral); }
+  .tag-purple { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .tag-green { background: rgba(52,211,153,0.15); color: var(--green); }
+
+  .atom-diagram {
+    display: flex; justify-content: center;
+    margin: 16px 0;
+  }
+  .atom {
+    position: relative; width: 140px; height: 140px;
+  }
+  .nucleus {
+    position: absolute; top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    width: 30px; height: 30px;
+    background: var(--coral);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #000;
+    z-index: 2;
+  }
+  .orbit {
+    position: absolute; top:50%; left:50%;
+    border: 1px solid rgba(0,229,204,0.3);
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .orbit1 { width: 60px; height: 60px; }
+  .orbit2 { width: 100px; height: 100px; transform: translate(-50%,-50%) rotate(45deg); }
+  .orbit3 { width: 140px; height: 140px; transform: translate(-50%,-50%) rotate(-30deg); }
+  .electron {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: var(--teal);
+    border-radius: 50%;
+    top: -4px; left: 50%; margin-left: -4px;
+  }
+
+  /* nav section titles */
+  .nav-section-wrap { padding: 6px 0; }
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND MOLECULES -->
+<div class="molecules-bg" id="molBg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚗ CHEM · CHAPTER 01</div>
+  <div class="nav-progress">
+    <span id="progressText">0 / 6 หัวข้อ</span>
+    <div class="progress-bar-nav"><div class="progress-fill-nav" id="navProgress"></div></div>
+  </div>
+</nav>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-label">เมนูหลัก</div>
+  <div class="sidebar-item active" onclick="showPage('home-page',this)" id="nav-home">
+    <div class="sidebar-dot"></div>🏠 หน้าแรก
+  </div>
+  <div class="sidebar-item" onclick="showPage('pretest-page',this)" id="nav-pretest">
+    <div class="sidebar-dot"></div>📝 แบบทดสอบก่อนเรียน
+  </div>
+  <div class="sidebar-label">เนื้อหา</div>
+  <div class="sidebar-item" onclick="showPage('s1-page',this)" id="nav-s1">
+    <div class="sidebar-dot"></div>⚛ ธาตุ สารประกอบ สารผสม
+  </div>
+  <div class="sidebar-item" onclick="showPage('s2-page',this)" id="nav-s2">
+    <div class="sidebar-dot"></div>🔬 การจำแนกสาร
+  </div>
+  <div class="sidebar-item" onclick="showPage('s3-page',this)" id="nav-s3">
+    <div class="sidebar-dot"></div>🧲 สมบัติของสาร
+  </div>
+  <div class="sidebar-item" onclick="showPage('s4-page',this)" id="nav-s4">
+    <div class="sidebar-dot"></div>🔥 การเปลี่ยนแปลง
+  </div>
+  <div class="sidebar-item" onclick="showPage('s5-page',this)" id="nav-s5">
+    <div class="sidebar-dot"></div>🧪 กรด-เบส และ pH
+  </div>
+  <div class="sidebar-item" onclick="showPage('s6-page',this)" id="nav-s6">
+    <div class="sidebar-dot"></div>⚗ การแยกสาร
+  </div>
+  <div class="sidebar-label">สรุป</div>
+  <div class="sidebar-item" onclick="showPage('complete-page',this)" id="nav-complete">
+    <div class="sidebar-dot"></div>🏆 สรุปผลการเรียน
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- ===================== HOME ===================== -->
+  <div id="home-page">
+    <div class="hero">
+      <div class="hero-badge">🔬 วิทยาศาสตร์ ม.ต้น</div>
+      <h1>บทที่ 1<br><span>สารและสมบัติของสาร</span></h1>
+      <p>เรียนรู้เรื่องธาตุ สารประกอบ สารผสม สมบัติของสาร การเปลี่ยนแปลง กรด-เบส และการแยกสาร พร้อมแบบฝึกหัดครบครัน</p>
+      <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="showPage('pretest-page', document.getElementById('nav-pretest'))">📝 เริ่มทำแบบทดสอบก่อนเรียน</button>
+        <button class="btn btn-secondary" onclick="showPage('s1-page', document.getElementById('nav-s1'))">⚛ เข้าสู่เนื้อหาทันที</button>
+      </div>
+    </div>
+
+    <div class="topic-grid">
+      <div class="topic-card" onclick="showPage('s1-page',document.getElementById('nav-s1'))">
+        <div class="topic-icon" style="background:rgba(255,107,107,0.15)">⚛</div>
+        <div>
+          <h3>ธาตุ สารประกอบ และสารผสม</h3>
+          <p>โครงสร้างพื้นฐานของสสาร</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="showPage('s2-page',document.getElementById('nav-s2'))">
+        <div class="topic-icon" style="background:rgba(0,229,204,0.15)">🔬</div>
+        <div>
+          <h3>การจำแนกสาร</h3>
+          <p>เนื้อเดียวและเนื้อผสม</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="showPage('s3-page',document.getElementById('nav-s3'))">
+        <div class="topic-icon" style="background:rgba(96,165,250,0.15)">🧲</div>
+        <div>
+          <h3>สมบัติของสาร</h3>
+          <p>ทางกายภาพ vs ทางเคมี</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="showPage('s4-page',document.getElementById('nav-s4'))">
+        <div class="topic-icon" style="background:rgba(255,209,102,0.15)">🔥</div>
+        <div>
+          <h3>การเปลี่ยนแปลง</h3>
+          <p>กายภาพและเคมี</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="showPage('s5-page',document.getElementById('nav-s5'))">
+        <div class="topic-icon" style="background:rgba(167,139,250,0.15)">🧪</div>
+        <div>
+          <h3>กรด-เบส และค่า pH</h3>
+          <p>สเกล pH และตัวบ่งชี้</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="showPage('s6-page',document.getElementById('nav-s6'))">
+        <div class="topic-icon" style="background:rgba(52,211,153,0.15)">⚗</div>
+        <div>
+          <h3>การแยกสาร</h3>
+          <p>กรอง กลั่น ตกผลึก และอื่นๆ</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PRETEST ===================== -->
+  <div id="pretest-page" class="section-page">
+    <div class="pretest-hero">
+      <div class="pretest-icon">📝</div>
+      <h2>แบบทดสอบก่อนเรียน</h2>
+      <p>ทดสอบความรู้เดิมของคุณก่อนเข้าสู่เนื้อหา<br>ตอบคำถาม 10 ข้อ ใช้เวลาประมาณ 5-8 นาที</p>
+    </div>
+
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">🎯 แบบทดสอบก่อนเรียน <span class="quiz-badge">10 ข้อ</span></div>
+      </div>
+
+      <div id="pretest-questions">
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">1</span>ข้อใดคือ "ธาตุ" (Element)?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',0,1)"><span class="option-letter">ก</span>น้ำ (H₂O)</div>
+            <div class="option" onclick="selectOpt(this,'pre',0,2)"><span class="option-letter">ข</span>เกลือแกง (NaCl)</div>
+            <div class="option" onclick="selectOpt(this,'pre',0,0)"><span class="option-letter">ค</span>ทองคำ (Au)</div>
+            <div class="option" onclick="selectOpt(this,'pre',0,3)"><span class="option-letter">ง</span>น้ำตาล (C₁₂H₂₂O₁₁)</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">2</span>สาร "เนื้อเดียว" (Homogeneous) หมายความว่าอย่างไร?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',1,1)"><span class="option-letter">ก</span>มองเห็นส่วนประกอบได้ด้วยตาเปล่า</div>
+            <div class="option" onclick="selectOpt(this,'pre',1,0)"><span class="option-letter">ข</span>มีลักษณะสม่ำเสมอทุกส่วน แยกส่วนประกอบด้วยตาเปล่าไม่ได้</div>
+            <div class="option" onclick="selectOpt(this,'pre',1,2)"><span class="option-letter">ค</span>เกิดจากธาตุเพียงชนิดเดียว</div>
+            <div class="option" onclick="selectOpt(this,'pre',1,3)"><span class="option-letter">ง</span>เกิดจากสารประกอบหลายชนิด</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">3</span>ข้อใดเป็น "สมบัติทางเคมี" ของสาร?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',2,1)"><span class="option-letter">ก</span>จุดเดือดของน้ำ 100°C</div>
+            <div class="option" onclick="selectOpt(this,'pre',2,2)"><span class="option-letter">ข</span>ความหนาแน่นของเหล็ก</div>
+            <div class="option" onclick="selectOpt(this,'pre',2,0)"><span class="option-letter">ค</span>ไม้ติดไฟได้</div>
+            <div class="option" onclick="selectOpt(this,'pre',2,3)"><span class="option-letter">ง</span>สีของทอง</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">4</span>การหั่นผักเป็นตัวอย่างของการเปลี่ยนแปลงชนิดใด?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',3,0)"><span class="option-letter">ก</span>การเปลี่ยนแปลงทางกายภาพ</div>
+            <div class="option" onclick="selectOpt(this,'pre',3,1)"><span class="option-letter">ข</span>การเปลี่ยนแปลงทางเคมี</div>
+            <div class="option" onclick="selectOpt(this,'pre',3,2)"><span class="option-letter">ค</span>การเปลี่ยนแปลงทางชีวภาพ</div>
+            <div class="option" onclick="selectOpt(this,'pre',3,3)"><span class="option-letter">ง</span>การเปลี่ยนแปลงทางนิวเคลียร์</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">5</span>สารละลายที่มีค่า pH = 3 มีสมบัติเป็นอย่างไร?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',4,1)"><span class="option-letter">ก</span>กรดอ่อน</div>
+            <div class="option" onclick="selectOpt(this,'pre',4,0)"><span class="option-letter">ข</span>กรดแก่</div>
+            <div class="option" onclick="selectOpt(this,'pre',4,2)"><span class="option-letter">ค</span>เบสอ่อน</div>
+            <div class="option" onclick="selectOpt(this,'pre',4,3)"><span class="option-letter">ง</span>กลาง</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">6</span>วิธีการใดเหมาะสำหรับแยกเกลือออกจากน้ำทะเล?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',5,1)"><span class="option-letter">ก</span>การกรอง</div>
+            <div class="option" onclick="selectOpt(this,'pre',5,0)"><span class="option-letter">ข</span>การระเหยหรือการตกผลึก</div>
+            <div class="option" onclick="selectOpt(this,'pre',5,2)"><span class="option-letter">ค</span>การกลั่น</div>
+            <div class="option" onclick="selectOpt(this,'pre',5,3)"><span class="option-letter">ง</span>โครมาโทกราฟี</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">7</span>"น้ำเกลือ" จัดเป็นสารประเภทใด?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',6,1)"><span class="option-letter">ก</span>ธาตุ</div>
+            <div class="option" onclick="selectOpt(this,'pre',6,2)"><span class="option-letter">ข</span>สารประกอบ</div>
+            <div class="option" onclick="selectOpt(this,'pre',6,0)"><span class="option-letter">ค</span>สารผสม (สารละลาย)</div>
+            <div class="option" onclick="selectOpt(this,'pre',6,3)"><span class="option-letter">ง</span>สารบริสุทธิ์</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">8</span>สารประกอบ H₂O ประกอบด้วยธาตุใดบ้าง?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',7,1)"><span class="option-letter">ก</span>ไฮโดรเจนและไนโตรเจน</div>
+            <div class="option" onclick="selectOpt(this,'pre',7,0)"><span class="option-letter">ข</span>ไฮโดรเจนและออกซิเจน</div>
+            <div class="option" onclick="selectOpt(this,'pre',7,2)"><span class="option-letter">ค</span>ออกซิเจนและคาร์บอน</div>
+            <div class="option" onclick="selectOpt(this,'pre',7,3)"><span class="option-letter">ง</span>ไฮโดรเจนและคาร์บอน</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">9</span>ข้อใดคือตัวอย่างของ "การเปลี่ยนแปลงทางเคมี"?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',8,1)"><span class="option-letter">ก</span>น้ำแข็งละลาย</div>
+            <div class="option" onclick="selectOpt(this,'pre',8,2)"><span class="option-letter">ข</span>น้ำตาลละลายในน้ำ</div>
+            <div class="option" onclick="selectOpt(this,'pre',8,0)"><span class="option-letter">ค</span>เหล็กเป็นสนิม</div>
+            <div class="option" onclick="selectOpt(this,'pre',8,3)"><span class="option-letter">ง</span>การบดย่อยเกลือ</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="question-text"><span class="q-num">10</span>การแยกสารโดยวิธีใดที่ใช้หลักการความแตกต่างของจุดเดือด?</div>
+          <div class="options">
+            <div class="option" onclick="selectOpt(this,'pre',9,1)"><span class="option-letter">ก</span>การกรอง</div>
+            <div class="option" onclick="selectOpt(this,'pre',9,2)"><span class="option-letter">ข</span>การตกผลึก</div>
+            <div class="option" onclick="selectOpt(this,'pre',9,0)"><span class="option-letter">ค</span>การกลั่น</div>
+            <div class="option" onclick="selectOpt(this,'pre',9,3)"><span class="option-letter">ง</span>การตกตะกอน</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('pre',10)">✅ ส่งคำตอบ</button>
+      </div>
+
+      <div class="quiz-result" id="result-pre">
+        <div class="result-score" id="score-pre"></div>
+        <div class="result-label">คะแนน</div>
+        <div class="result-msg" id="msg-pre"></div>
+        <div style="margin-top:20px;">
+          <button class="btn btn-gold" onclick="showPage('s1-page',document.getElementById('nav-s1'))">🚀 เริ่มเรียนเนื้อหาเลย!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 1 ===================== -->
+  <div id="s1-page" class="section-page">
+    <div class="section-header">
+      <div class="section-icon-big" style="background:rgba(255,107,107,0.15)">⚛</div>
+      <div>
+        <h2>ธาตุ สารประกอบ และสารผสม</h2>
+        <p>รู้จักหน่วยพื้นฐานของสสาร ตั้งแต่อะตอม ธาตุ ไปจนถึงสารประกอบและสารผสม</p>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>⚛ ธาตุ (Element)</h3>
+      <p>ธาตุคือสารบริสุทธิ์ที่ประกอบด้วย<strong>อะตอมชนิดเดียวกัน</strong>ทั้งหมด ไม่สามารถแยกสลายได้อีกด้วยวิธีทางเคมี ธาตุทุกชนิดมีสัญลักษณ์และเลขอะตอมเฉพาะตัว</p>
+      <div class="highlight-box">
+        <strong>ตัวอย่างธาตุที่รู้จักกัน:</strong><br>
+        <span class="tag tag-coral">🥇 ทองคำ (Au)</span>
+        <span class="tag tag-coral">🩸 เหล็ก (Fe)</span>
+        <span class="tag tag-coral">💨 ออกซิเจน (O₂)</span>
+        <span class="tag tag-coral">💧 ไฮโดรเจน (H₂)</span>
+        <span class="tag tag-coral">⚡ คาร์บอน (C)</span>
+        <span class="tag tag-coral">☁ ไนโตรเจน (N₂)</span>
+        <br><br>ปัจจุบันมีธาตุที่รู้จักแล้ว <strong style="color:var(--coral)">118 ธาตุ</strong> ในตารางธาตุ
+      </div>
+
+      <div class="atom-diagram">
+        <div class="atom">
+          <div class="nucleus">He</div>
+          <div class="orbit orbit1"><div class="electron"></div></div>
+          <div class="orbit orbit2"><div class="electron"></div></div>
+          <div class="orbit orbit3"><div class="electron"></div></div>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted)">โครงสร้างอะตอมประกอบด้วยนิวเคลียสตรงกลาง และอิเล็กตรอนวิ่งรอบนอก</p>
+    </div>
+
+    <div class="content-block">
+      <h3>🔗 สารประกอบ (Compound)</h3>
+      <p>สารประกอบเกิดจาก<strong>ธาตุตั้งแต่ 2 ชนิดขึ้นไป</strong>มารวมกันทางเคมีในอัตราส่วนที่แน่นอน สมบัติของสารประกอบต่างจากธาตุที่เป็นส่วนประกอบ</p>
+      <table class="chem-table">
+        <thead>
+          <tr><th>สารประกอบ</th><th>สูตรเคมี</th><th>ธาตุที่ประกอบ</th><th>สมบัติ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>น้ำ</td><td>H₂O</td><td>H + O</td><td>ของเหลวไม่มีสี ไม่มีกลิ่น</td></tr>
+          <tr><td>เกลือแกง</td><td>NaCl</td><td>Na + Cl</td><td>ของแข็งสีขาว รสเค็ม</td></tr>
+          <tr><td>คาร์บอนไดออกไซด์</td><td>CO₂</td><td>C + O</td><td>แก๊สไม่มีสี ไม่มีกลิ่น</td></tr>
+          <tr><td>น้ำตาล</td><td>C₁₂H₂₂O₁₁</td><td>C + H + O</td><td>ของแข็งสีขาว รสหวาน</td></tr>
+          <tr><td>แอมโมเนีย</td><td>NH₃</td><td>N + H</td><td>แก๊สมีกลิ่นฉุน</td></tr>
+        </tbody>
+      </table>
+      <div class="highlight-box gold">
+        <strong>💡 สำคัญ:</strong> สารประกอบ <u>แยกสลายได้</u>ด้วยวิธีทางเคมี เช่น การอิเล็กโทรไลซิส น้ำ → H₂ + O₂
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🧩 สารผสม (Mixture)</h3>
+      <p>สารผสมเกิดจากสาร<strong>ตั้งแต่ 2 ชนิดขึ้นไปผสมกันโดยไม่เกิดปฏิกิริยาเคมี</strong> ส่วนประกอบยังคงสมบัติเดิม และสามารถแยกออกจากกันได้ด้วยวิธีทางกายภาพ</p>
+      <div class="two-col">
+        <div class="info-card" style="border-color:rgba(0,229,204,0.3)">
+          <h4 style="color:var(--teal)">สารละลาย (Solution)</h4>
+          <ul>
+            <li>เนื้อเดียวกัน (Homogeneous)</li>
+            <li>อนุภาคเล็กมาก &lt;1 nm</li>
+            <li>แสงผ่านได้ ใส</li>
+            <li><em>เช่น: น้ำเกลือ น้ำตาลในน้ำ</em></li>
+          </ul>
+        </div>
+        <div class="info-card" style="border-color:rgba(255,209,102,0.3)">
+          <h4 style="color:var(--gold)">คอลลอยด์ (Colloid)</h4>
+          <ul>
+            <li>กึ่งเนื้อเดียว</li>
+            <li>อนุภาค 1–100 nm</li>
+            <li>เกิดปรากฏการณ์ทินดอลล์</li>
+            <li><em>เช่น: นม หมอก เยลลี่</em></li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-card" style="border-color:rgba(255,107,107,0.3);margin-top:12px">
+        <h4 style="color:var(--coral)">สารแขวนลอย (Suspension)</h4>
+        <ul style="columns:2">
+          <li>เนื้อผสม (Heterogeneous)</li>
+          <li>อนุภาค &gt;100 nm</li>
+          <li>ตกตะกอนได้</li>
+          <li><em>เช่น: น้ำโคลน น้ำแป้ง</em></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WORKSHEET S1 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">📋 ใบงานหลังเรียน <span class="quiz-badge">หัวข้อที่ 1</span></div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">1</span>ข้อใดจัดเป็น "สารบริสุทธิ์" (Pure Substance)?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s1',0,1)"><span class="option-letter">ก</span>น้ำเกลือ</div>
+          <div class="option" onclick="selectOpt(this,'s1',0,2)"><span class="option-letter">ข</span>อากาศ</div>
+          <div class="option" onclick="selectOpt(this,'s1',0,0)"><span class="option-letter">ค</span>น้ำบริสุทธิ์ (H₂O)</div>
+          <div class="option" onclick="selectOpt(this,'s1',0,3)"><span class="option-letter">ง</span>น้ำโคลน</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">2</span>สาร CO₂ คือสารประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s1',1,1)"><span class="option-letter">ก</span>ธาตุ</div>
+          <div class="option" onclick="selectOpt(this,'s1',1,0)"><span class="option-letter">ข</span>สารประกอบ</div>
+          <div class="option" onclick="selectOpt(this,'s1',1,2)"><span class="option-letter">ค</span>สารละลาย</div>
+          <div class="option" onclick="selectOpt(this,'s1',1,3)"><span class="option-letter">ง</span>คอลลอยด์</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">3</span>นมสดจัดเป็นสารผสมประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s1',2,1)"><span class="option-letter">ก</span>สารละลาย</div>
+          <div class="option" onclick="selectOpt(this,'s1',2,0)"><span class="option-letter">ข</span>คอลลอยด์</div>
+          <div class="option" onclick="selectOpt(this,'s1',2,2)"><span class="option-letter">ค</span>สารแขวนลอย</div>
+          <div class="option" onclick="selectOpt(this,'s1',2,3)"><span class="option-letter">ง</span>สารบริสุทธิ์</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">4</span>ข้อใดบอกความแตกต่างระหว่าง "ธาตุ" และ "สารประกอบ" ได้ถูกต้องที่สุด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s1',3,1)"><span class="option-letter">ก</span>ธาตุมีสูตรเคมีซับซ้อนกว่า</div>
+          <div class="option" onclick="selectOpt(this,'s1',3,0)"><span class="option-letter">ข</span>ธาตุประกอบด้วยอะตอมชนิดเดียว สารประกอบมี 2 ชนิดขึ้นไปรวมกัน</div>
+          <div class="option" onclick="selectOpt(this,'s1',3,2)"><span class="option-letter">ค</span>สารประกอบมีสภาพเป็นของแข็งเท่านั้น</div>
+          <div class="option" onclick="selectOpt(this,'s1',3,3)"><span class="option-letter">ง</span>ธาตุพบได้เฉพาะในธรรมชาติ</div>
+        </div>
+      </div>
+
+      <div class="open-question">
+        <div class="open-q-text"><span class="q-num">5</span>จงยกตัวอย่างสารในชีวิตประจำวัน อย่างละ 2 ชนิด ได้แก่ ธาตุ สารประกอบ และสารผสม พร้อมอธิบายเหตุผล</div>
+        <textarea class="open-answer" placeholder="เขียนคำตอบที่นี่..."></textarea>
+        <div class="answer-hint">💡 แนวคำตอบ: ธาตุ = ทองคำ เหล็ก | สารประกอบ = น้ำ เกลือ | สารผสม = น้ำเกลือ อากาศ</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('s1',4); markDone('s1')">✅ ส่งใบงาน</button>
+      </div>
+      <div class="quiz-result" id="result-s1">
+        <div class="result-score" id="score-s1"></div>
+        <div class="result-label">คะแนน (4 ข้อปรนัย)</div>
+        <div class="result-msg" id="msg-s1"></div>
+        <div style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="showPage('s2-page',document.getElementById('nav-s2'))">➡ หัวข้อถัดไป: การจำแนกสาร</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 2 ===================== -->
+  <div id="s2-page" class="section-page">
+    <div class="section-header">
+      <div class="section-icon-big" style="background:rgba(0,229,204,0.15)">🔬</div>
+      <div>
+        <h2>การจำแนกสาร</h2>
+        <p>แยกแยะสารตามลักษณะภายในเป็นสารเนื้อเดียวและสารเนื้อผสม</p>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🗂 หลักการจำแนกสาร</h3>
+      <p>สารสามารถจำแนกได้หลายแบบขึ้นอยู่กับเกณฑ์ที่ใช้ เกณฑ์ที่นิยมคือ <strong>"ความสม่ำเสมอของเนื้อสาร"</strong></p>
+      <div class="highlight-box">
+        <strong>แผนผังการจำแนกสาร:</strong><br><br>
+        สาร<br>
+        ├── <span style="color:var(--teal)">สารบริสุทธิ์ (Pure Substance)</span><br>
+        │&nbsp;&nbsp;&nbsp;&nbsp;├── ธาตุ → อะตอมชนิดเดียว<br>
+        │&nbsp;&nbsp;&nbsp;&nbsp;└── สารประกอบ → อะตอม ≥ 2 ชนิด รวมทางเคมี<br>
+        └── <span style="color:var(--gold)">สารผสม (Mixture)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── เนื้อเดียว (Homogeneous) → สารละลาย<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── เนื้อผสม (Heterogeneous) → คอลลอยด์ สารแขวนลอย
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🔍 สารเนื้อเดียว (Homogeneous)</h3>
+      <p>มีส่วนประกอบ<strong>กระจายตัวสม่ำเสมอ</strong>ทุกส่วน มองด้วยตาเปล่าไม่เห็นการแยกชั้น แสงสามารถผ่านได้</p>
+      <table class="chem-table">
+        <thead><tr><th>ตัวอย่าง</th><th>ตัวละลาย</th><th>ตัวทำละลาย</th><th>สถานะ</th></tr></thead>
+        <tbody>
+          <tr><td>น้ำเกลือ</td><td>เกลือ (NaCl)</td><td>น้ำ</td><td>ของเหลว</td></tr>
+          <tr><td>น้ำตาลในน้ำ</td><td>น้ำตาล</td><td>น้ำ</td><td>ของเหลว</td></tr>
+          <tr><td>อากาศ</td><td>O₂, CO₂, ฯลฯ</td><td>N₂</td><td>แก๊ส</td></tr>
+          <tr><td>ทองเหลือง</td><td>สังกะสี (Zn)</td><td>ทองแดง (Cu)</td><td>ของแข็ง (โลหะผสม)</td></tr>
+          <tr><td>น้ำส้มสายชู</td><td>กรดอะซิติก</td><td>น้ำ</td><td>ของเหลว</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content-block">
+      <h3>🌫 สารเนื้อผสม (Heterogeneous)</h3>
+      <p>มีส่วนประกอบ<strong>ไม่สม่ำเสมอ</strong> สามารถมองเห็นหรือแยกแยะส่วนประกอบได้</p>
+      <div class="two-col">
+        <div class="info-card">
+          <h4 style="color:var(--purple)">ตัวอย่างสารเนื้อผสม</h4>
+          <ul>
+            <li>น้ำโคลน (ดินในน้ำ)</li>
+            <li>สลัดผัก</li>
+            <li>ทราย + เหล็กผง</li>
+            <li>น้ำแป้งข้าวโพด</li>
+            <li>หินแกรนิต</li>
+            <li>น้ำมันกับน้ำ</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4 style="color:var(--gold)">สังเกตอย่างไรว่าเนื้อผสม?</h4>
+          <ul>
+            <li>มองเห็นส่วนประกอบต่างสี</li>
+            <li>เมื่อทิ้งไว้มีการตกตะกอน</li>
+            <li>แสงผ่านได้ไม่สม่ำเสมอ</li>
+            <li>กรองหรือแยกด้วยมือได้</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSHEET S2 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">📋 ใบงานหลังเรียน <span class="quiz-badge">หัวข้อที่ 2</span></div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">1</span>ข้อใดเป็น "สารเนื้อเดียว" ทั้งหมด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s2',0,1)"><span class="option-letter">ก</span>น้ำโคลน และ น้ำส้มสายชู</div>
+          <div class="option" onclick="selectOpt(this,'s2',0,0)"><span class="option-letter">ข</span>อากาศ และ น้ำเกลือ</div>
+          <div class="option" onclick="selectOpt(this,'s2',0,2)"><span class="option-letter">ค</span>สลัดผัก และ น้ำมันกับน้ำ</div>
+          <div class="option" onclick="selectOpt(this,'s2',0,3)"><span class="option-letter">ง</span>ทราย และ น้ำตาล</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">2</span>ทองเหลือง (Brass) จัดเป็นสารประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s2',1,1)"><span class="option-letter">ก</span>สารบริสุทธิ์ (ธาตุ)</div>
+          <div class="option" onclick="selectOpt(this,'s2',1,2)"><span class="option-letter">ข</span>สารบริสุทธิ์ (สารประกอบ)</div>
+          <div class="option" onclick="selectOpt(this,'s2',1,0)"><span class="option-letter">ค</span>สารผสมเนื้อเดียว (โลหะผสม)</div>
+          <div class="option" onclick="selectOpt(this,'s2',1,3)"><span class="option-letter">ง</span>สารผสมเนื้อผสม</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">3</span>การที่แสงเลเซอร์ผ่านนมแล้วเห็นลำแสงชัดเจน (ปรากฏการณ์ทินดอลล์) แสดงว่านมเป็นสารประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s2',2,1)"><span class="option-letter">ก</span>สารละลาย</div>
+          <div class="option" onclick="selectOpt(this,'s2',2,0)"><span class="option-letter">ข</span>คอลลอยด์</div>
+          <div class="option" onclick="selectOpt(this,'s2',2,2)"><span class="option-letter">ค</span>สารแขวนลอย</div>
+          <div class="option" onclick="selectOpt(this,'s2',2,3)"><span class="option-letter">ง</span>สารบริสุทธิ์</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">4</span>ข้อแตกต่างระหว่าง "สารละลาย" กับ "สารแขวนลอย" คือ?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s2',3,1)"><span class="option-letter">ก</span>สารละลายเป็นของแข็งเสมอ</div>
+          <div class="option" onclick="selectOpt(this,'s2',3,0)"><span class="option-letter">ข</span>สารละลายอนุภาคเล็กมาก ใส สารแขวนลอยอนุภาคใหญ่กว่า ตกตะกอนได้</div>
+          <div class="option" onclick="selectOpt(this,'s2',3,2)"><span class="option-letter">ค</span>สารแขวนลอยเป็นสารบริสุทธิ์</div>
+          <div class="option" onclick="selectOpt(this,'s2',3,3)"><span class="option-letter">ง</span>สารละลายและสารแขวนลอยเหมือนกันทุกประการ</div>
+        </div>
+      </div>
+
+      <div class="open-question">
+        <div class="open-q-text"><span class="q-num">5</span>จงวาดแผนผัง (ด้วยตัวอักษร) แสดงการจำแนกประเภทสาร และยกตัวอย่างสารในแต่ละประเภท อย่างน้อยประเภทละ 2 ชนิด</div>
+        <textarea class="open-answer" placeholder="เขียนแผนผังและตัวอย่างที่นี่..."></textarea>
+        <div class="answer-hint">💡 เริ่มจาก: สาร → สารบริสุทธิ์ / สารผสม แล้วแตกสาขาต่อ</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('s2',4); markDone('s2')">✅ ส่งใบงาน</button>
+      </div>
+      <div class="quiz-result" id="result-s2">
+        <div class="result-score" id="score-s2"></div>
+        <div class="result-label">คะแนน (4 ข้อปรนัย)</div>
+        <div class="result-msg" id="msg-s2"></div>
+        <div style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="showPage('s3-page',document.getElementById('nav-s3'))">➡ หัวข้อถัดไป: สมบัติของสาร</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 3 ===================== -->
+  <div id="s3-page" class="section-page">
+    <div class="section-header">
+      <div class="section-icon-big" style="background:rgba(96,165,250,0.15)">🧲</div>
+      <div>
+        <h2>สมบัติทางกายภาพและสมบัติทางเคมี</h2>
+        <p>สำรวจคุณลักษณะของสารที่สังเกตได้โดยไม่เปลี่ยนแปลงองค์ประกอบ และที่แสดงออกเมื่อเกิดปฏิกิริยา</p>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🔵 สมบัติทางกายภาพ (Physical Properties)</h3>
+      <p>สมบัติที่สามารถสังเกตหรือวัดได้<strong>โดยไม่ต้องเปลี่ยนองค์ประกอบทางเคมี</strong>ของสาร</p>
+      <div class="two-col">
+        <div class="info-card" style="border-color:rgba(96,165,250,0.3)">
+          <h4 style="color:var(--blue)">ตัวอย่างสมบัติทางกายภาพ</h4>
+          <ul>
+            <li>สี (Color)</li>
+            <li>กลิ่น (Odor)</li>
+            <li>จุดเดือด/จุดหลอมเหลว</li>
+            <li>ความหนาแน่น (Density)</li>
+            <li>ความแข็ง (Hardness)</li>
+            <li>การนำไฟฟ้า/ความร้อน</li>
+            <li>ความสามารถละลายน้ำ</li>
+            <li>สถานะ (ของแข็ง ของเหลว แก๊ส)</li>
+          </ul>
+        </div>
+        <div class="info-card" style="border-color:rgba(255,107,107,0.3)">
+          <h4 style="color:var(--coral)">ตัวอย่างสมบัติทางเคมี</h4>
+          <ul>
+            <li>การติดไฟได้ (Flammability)</li>
+            <li>การเกิดสนิม (Reactivity with O₂)</li>
+            <li>การทำปฏิกิริยากับกรด-เบส</li>
+            <li>ความเป็นพิษ (Toxicity)</li>
+            <li>ความสามารถในการสลายตัว</li>
+            <li>การทำปฏิกิริยากับน้ำ</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight-box gold">
+        <strong>🔑 จุดสังเกต:</strong> สมบัติทางกายภาพ = ดู วัด จับได้โดยตรง <br>สมบัติทางเคมี = ต้องทำให้เกิด<strong>ปฏิกิริยา</strong>ก่อนจึงจะแสดงออกมา
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>📊 ตัวอย่างสมบัติของสารทั่วไป</h3>
+      <table class="chem-table">
+        <thead><tr><th>สาร</th><th>สมบัติทางกายภาพ</th><th>สมบัติทางเคมี</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>น้ำ (H₂O)</strong></td>
+            <td>ไม่มีสี ไม่มีกลิ่น จุดเดือด 100°C นำไฟฟ้าได้เล็กน้อย</td>
+            <td>ทำปฏิกิริยากับโลหะบางชนิดได้ แยกสลายด้วยไฟฟ้าได้</td>
+          </tr>
+          <tr>
+            <td><strong>เหล็ก (Fe)</strong></td>
+            <td>สีเงิน นำไฟฟ้า/ความร้อนได้ดี หนาแน่น 7.87 g/cm³</td>
+            <td>เกิดสนิมได้ ทำปฏิกิริยากับกรดเจือจาง ติดไฟได้ในออกซิเจน</td>
+          </tr>
+          <tr>
+            <td><strong>ทองคำ (Au)</strong></td>
+            <td>สีเหลือง นำไฟฟ้าได้ดี อ่อนตัวง่าย</td>
+            <td>ทนต่อปฏิกิริยาเคมีส่วนใหญ่ ละลายได้เฉพาะใน aqua regia</td>
+          </tr>
+          <tr>
+            <td><strong>ไม้</strong></td>
+            <td>สีน้ำตาล ผิวสัมผัสหยาบ ไม่นำไฟฟ้า</td>
+            <td>ติดไฟได้ สลายตัวได้ ทำปฏิกิริยากับกรดได้ช้า</td>
+          </tr>
+          <tr>
+            <td><strong>NaCl (เกลือ)</strong></td>
+            <td>ผลึกสีขาว รสเค็ม ละลายน้ำได้ดี</td>
+            <td>ทำปฏิกิริยากับ AgNO₃ เกิดตะกอนสีขาว</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- WORKSHEET S3 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">📋 ใบงานหลังเรียน <span class="quiz-badge">หัวข้อที่ 3</span></div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">1</span>ข้อใดเป็น "สมบัติทางกายภาพ" ของเหล็ก?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s3',0,1)"><span class="option-letter">ก</span>เหล็กติดไฟได้ในออกซิเจน</div>
+          <div class="option" onclick="selectOpt(this,'s3',0,2)"><span class="option-letter">ข</span>เหล็กทำปฏิกิริยากับกรดไฮโดรคลอริก</div>
+          <div class="option" onclick="selectOpt(this,'s3',0,0)"><span class="option-letter">ค</span>เหล็กนำไฟฟ้าได้ดี</div>
+          <div class="option" onclick="selectOpt(this,'s3',0,3)"><span class="option-letter">ง</span>เหล็กเกิดสนิมเมื่อถูกความชื้น</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">2</span>"ไม้สามารถติดไฟได้" เป็นสมบัติประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s3',1,1)"><span class="option-letter">ก</span>สมบัติทางกายภาพ</div>
+          <div class="option" onclick="selectOpt(this,'s3',1,0)"><span class="option-letter">ข</span>สมบัติทางเคมี</div>
+          <div class="option" onclick="selectOpt(this,'s3',1,2)"><span class="option-letter">ค</span>สมบัติทางชีวภาพ</div>
+          <div class="option" onclick="selectOpt(this,'s3',1,3)"><span class="option-letter">ง</span>สมบัติทางกายภาพและเคมีพร้อมกัน</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">3</span>ข้อใดบอกถึงสมบัติทางเคมีของน้ำ?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s3',2,1)"><span class="option-letter">ก</span>น้ำเดือดที่ 100°C</div>
+          <div class="option" onclick="selectOpt(this,'s3',2,2)"><span class="option-letter">ข</span>น้ำไม่มีสีและไม่มีกลิ่น</div>
+          <div class="option" onclick="selectOpt(this,'s3',2,0)"><span class="option-letter">ค</span>น้ำสามารถแยกสลายเป็น H₂ และ O₂ ด้วยกระแสไฟฟ้า</div>
+          <div class="option" onclick="selectOpt(this,'s3',2,3)"><span class="option-letter">ง</span>น้ำมีความหนาแน่น 1 g/cm³</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">4</span>นักเรียนสังเกตว่าเกลือแกงมีรสเค็มและละลายน้ำได้ ทั้งสองอย่างนี้จัดเป็นสมบัติประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s3',3,1)"><span class="option-letter">ก</span>ทางกายภาพ และทางเคมี ตามลำดับ</div>
+          <div class="option" onclick="selectOpt(this,'s3',3,0)"><span class="option-letter">ข</span>ทางกายภาพ ทั้งสองอย่าง</div>
+          <div class="option" onclick="selectOpt(this,'s3',3,2)"><span class="option-letter">ค</span>ทางเคมี ทั้งสองอย่าง</div>
+          <div class="option" onclick="selectOpt(this,'s3',3,3)"><span class="option-letter">ง</span>ทางเคมี และทางกายภาพ ตามลำดับ</div>
+        </div>
+      </div>
+
+      <div class="open-question">
+        <div class="open-q-text"><span class="q-num">5</span>เลือกสารมา 1 ชนิดที่คุณรู้จัก และระบุสมบัติทางกายภาพอย่างน้อย 3 ข้อ และสมบัติทางเคมีอย่างน้อย 2 ข้อ</div>
+        <textarea class="open-answer" placeholder="ระบุชื่อสาร และสมบัติต่างๆ..."></textarea>
+        <div class="answer-hint">💡 เช่น อลูมิเนียม: ทางกายภาพ = สีเงิน เบา นำไฟฟ้า | ทางเคมี = ทำปฏิกิริยากับกรด เกิดออกไซด์ที่ผิว</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('s3',4); markDone('s3')">✅ ส่งใบงาน</button>
+      </div>
+      <div class="quiz-result" id="result-s3">
+        <div class="result-score" id="score-s3"></div>
+        <div class="result-label">คะแนน (4 ข้อปรนัย)</div>
+        <div class="result-msg" id="msg-s3"></div>
+        <div style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="showPage('s4-page',document.getElementById('nav-s4'))">➡ หัวข้อถัดไป: การเปลี่ยนแปลง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 4 ===================== -->
+  <div id="s4-page" class="section-page">
+    <div class="section-header">
+      <div class="section-icon-big" style="background:rgba(255,209,102,0.15)">🔥</div>
+      <div>
+        <h2>การเปลี่ยนแปลงทางกายภาพและทางเคมี</h2>
+        <p>เข้าใจความแตกต่างระหว่างการเปลี่ยนแปลงที่คงสารเดิมไว้ กับการที่เกิดสารใหม่</p>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>💧 การเปลี่ยนแปลงทางกายภาพ (Physical Change)</h3>
+      <p>การเปลี่ยนแปลงที่<strong>ไม่ก่อให้เกิดสารใหม่</strong> เปลี่ยนแค่รูปร่าง ขนาด หรือสถานะ แต่ยังคงเป็นสารชนิดเดิม</p>
+      <div class="highlight-box">
+        <strong>ลักษณะสำคัญ:</strong><br>
+        ✅ ย้อนกลับได้ (ส่วนใหญ่) &nbsp;&nbsp; ✅ ไม่มีสารใหม่เกิดขึ้น <br>
+        ✅ มวลรวมไม่เปลี่ยน &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✅ โครงสร้างโมเลกุลเดิม
+      </div>
+      <div class="two-col">
+        <div class="info-card" style="border-color:rgba(96,165,250,0.3)">
+          <h4 style="color:var(--blue)">ตัวอย่าง</h4>
+          <ul>
+            <li>น้ำแข็งละลายเป็นน้ำ</li>
+            <li>การหั่น บด ทุบสาร</li>
+            <li>น้ำระเหยกลายเป็นไอ</li>
+            <li>น้ำตาลละลายในน้ำ</li>
+            <li>กระจกแตก</li>
+            <li>การยืดเหยียดโลหะ</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4 style="color:var(--muted)">สังเกตอย่างไร?</h4>
+          <ul>
+            <li>รูปร่างเปลี่ยน แต่สมบัติเดิม</li>
+            <li>ไม่มีแก๊ส ตะกอน หรือสีใหม่เกิด</li>
+            <li>อุณหภูมิไม่เปลี่ยนแปลงมาก</li>
+            <li>กลับคืนสู่สภาพเดิมได้</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🔥 การเปลี่ยนแปลงทางเคมี (Chemical Change)</h3>
+      <p>การเปลี่ยนแปลงที่<strong>เกิดสารใหม่</strong>ขึ้น มีองค์ประกอบทางเคมีต่างจากสารเดิม</p>
+      <div class="highlight-box coral">
+        <strong>สัญญาณบ่งบอกการเปลี่ยนแปลงทางเคมี:</strong><br>
+        🔴 เกิดแก๊ส (ฟองอากาศ) &nbsp;&nbsp; 🔴 เกิดตะกอนสีใหม่<br>
+        🔴 มีการเปลี่ยนสี &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🔴 มีการเปล่งแสง<br>
+        🔴 มีกลิ่นใหม่เกิดขึ้น &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🔴 เปลี่ยนอุณหภูมิอย่างมีนัยสำคัญ
+      </div>
+      <table class="chem-table">
+        <thead><tr><th>ตัวอย่าง</th><th>สิ่งที่สังเกตได้</th><th>สารใหม่ที่เกิด</th></tr></thead>
+        <tbody>
+          <tr><td>เหล็กเป็นสนิม</td><td>เปลี่ยนสีเป็นสีน้ำตาลแดง</td><td>Fe₂O₃ (เหล็กออกไซด์)</td></tr>
+          <tr><td>กระดาษไหม้</td><td>เกิดเถ้า แก๊ส ความร้อน แสง</td><td>CO₂ + H₂O + เถ้า</td></tr>
+          <tr><td>ไข่สุก</td><td>สีและเนื้อเปลี่ยน ย้อนกลับไม่ได้</td><td>โปรตีนเสียสภาพ</td></tr>
+          <tr><td>นม + เปรี้ยว</td><td>เกิดก้อนตะกอนสีขาว</td><td>กรดแลกติก + casein</td></tr>
+          <tr><td>ดอกไม้ไฟ</td><td>เกิดแสง เสียง ควัน</td><td>ออกไซด์ต่างๆ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- WORKSHEET S4 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">📋 ใบงานหลังเรียน <span class="quiz-badge">หัวข้อที่ 4</span></div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">1</span>ข้อใดคือ "การเปลี่ยนแปลงทางเคมี"?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s4',0,1)"><span class="option-letter">ก</span>น้ำแข็งละลาย</div>
+          <div class="option" onclick="selectOpt(this,'s4',0,2)"><span class="option-letter">ข</span>น้ำตาลละลายในน้ำ</div>
+          <div class="option" onclick="selectOpt(this,'s4',0,3)"><span class="option-letter">ค</span>กระจกแตก</div>
+          <div class="option" onclick="selectOpt(this,'s4',0,0)"><span class="option-letter">ง</span>กระดาษไหม้</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">2</span>ข้อใดไม่ใช่สัญญาณบ่งบอกการเปลี่ยนแปลงทางเคมี?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s4',1,1)"><span class="option-letter">ก</span>เกิดฟองแก๊ส</div>
+          <div class="option" onclick="selectOpt(this,'s4',1,2)"><span class="option-letter">ข</span>เกิดตะกอนสีใหม่</div>
+          <div class="option" onclick="selectOpt(this,'s4',1,0)"><span class="option-letter">ค</span>รูปร่างเปลี่ยนแปลง</div>
+          <div class="option" onclick="selectOpt(this,'s4',1,3)"><span class="option-letter">ง</span>มีแสงและความร้อนเกิดขึ้น</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">3</span>"น้ำตาลละลายในน้ำ" จัดเป็นการเปลี่ยนแปลงประเภทใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s4',2,0)"><span class="option-letter">ก</span>ทางกายภาพ เพราะน้ำตาลยังคงสูตรเคมีเดิม (C₁₂H₂₂O₁₁)</div>
+          <div class="option" onclick="selectOpt(this,'s4',2,1)"><span class="option-letter">ข</span>ทางเคมี เพราะน้ำตาลหายไป</div>
+          <div class="option" onclick="selectOpt(this,'s4',2,2)"><span class="option-letter">ค</span>ทางชีวภาพ</div>
+          <div class="option" onclick="selectOpt(this,'s4',2,3)"><span class="option-letter">ง</span>ทั้งทางกายภาพและทางเคมี</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">4</span>การเปลี่ยนแปลงทางกายภาพต่างจากทางเคมีในเรื่องใดมากที่สุด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s4',3,1)"><span class="option-letter">ก</span>การเปลี่ยนแปลงทางกายภาพรุนแรงกว่า</div>
+          <div class="option" onclick="selectOpt(this,'s4',3,0)"><span class="option-letter">ข</span>การเปลี่ยนแปลงทางเคมีเกิดสารใหม่ขึ้น ทางกายภาพไม่เกิดสารใหม่</div>
+          <div class="option" onclick="selectOpt(this,'s4',3,2)"><span class="option-letter">ค</span>การเปลี่ยนแปลงทางกายภาพต้องใช้ความร้อน</div>
+          <div class="option" onclick="selectOpt(this,'s4',3,3)"><span class="option-letter">ง</span>การเปลี่ยนแปลงทางเคมีย้อนกลับได้เสมอ</div>
+        </div>
+      </div>
+
+      <div class="open-question">
+        <div class="open-q-text"><span class="q-num">5</span>ยกตัวอย่างกิจกรรมในครัวที่เป็นการเปลี่ยนแปลงทางกายภาพ 2 อย่าง และทางเคมี 2 อย่าง พร้อมอธิบายเหตุผล</div>
+        <textarea class="open-answer" placeholder="เขียนตัวอย่างพร้อมเหตุผล..."></textarea>
+        <div class="answer-hint">💡 แนวคิด: กายภาพ = หั่น บด ผสม | เคมี = ผัด ต้ม ทอด ปิ้ง</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('s4',4); markDone('s4')">✅ ส่งใบงาน</button>
+      </div>
+      <div class="quiz-result" id="result-s4">
+        <div class="result-score" id="score-s4"></div>
+        <div class="result-label">คะแนน (4 ข้อปรนัย)</div>
+        <div class="result-msg" id="msg-s4"></div>
+        <div style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="showPage('s5-page',document.getElementById('nav-s5'))">➡ หัวข้อถัดไป: กรด-เบส และ pH</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 5 ===================== -->
+  <div id="s5-page" class="section-page">
+    <div class="section-header">
+      <div class="section-icon-big" style="background:rgba(167,139,250,0.15)">🧪</div>
+      <div>
+        <h2>กรด-เบส และค่า pH</h2>
+        <p>ทำความรู้จักกับสมบัติของสารละลายกรด-เบส สเกล pH และการนำไปใช้ในชีวิตประจำวัน</p>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🔴 สารละลายกรด (Acid)</h3>
+      <p>สารที่เมื่อละลายในน้ำจะ<strong>ให้ไฮโดรเจนไอออน (H⁺)</strong> มีรสเปรี้ยว กัดกร่อนโลหะ เปลี่ยนสีกระดาษลิตมัสจากน้ำเงินเป็นแดง</p>
+      <div class="two-col">
+        <div class="info-card" style="border-color:rgba(255,107,107,0.3)">
+          <h4 style="color:var(--coral)">ตัวอย่างกรด</h4>
+          <ul>
+            <li>กรดไฮโดรคลอริก (HCl) – กรดเกลือ</li>
+            <li>กรดกำมะถัน (H₂SO₄)</li>
+            <li>กรดไนตริก (HNO₃)</li>
+            <li>กรดแอซิติก (CH₃COOH) – น้ำส้ม</li>
+            <li>กรดซิตริก – ในส้ม มะนาว</li>
+            <li>กรดคาร์บอนิก – ในน้ำอัดลม</li>
+          </ul>
+        </div>
+        <div class="info-card" style="border-color:rgba(96,165,250,0.3)">
+          <h4 style="color:var(--blue)">ตัวอย่างเบส</h4>
+          <ul>
+            <li>โซเดียมไฮดรอกไซด์ (NaOH) – โซดาไฟ</li>
+            <li>แอมโมเนีย (NH₃)</li>
+            <li>แคลเซียมไฮดรอกไซด์ – ปูนขาว</li>
+            <li>โพแทสเซียมไฮดรอกไซด์ (KOH)</li>
+            <li>เบกกิ้งโซดา (NaHCO₃)</li>
+            <li>น้ำยาล้างห้องน้ำ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>📊 สเกล pH</h3>
+      <p>ค่า pH วัดความเป็นกรด-เบสของสาร มีค่าตั้งแต่ 0 ถึง 14</p>
+
+      <div class="ph-scale">
+        <div class="ph-bar">
+          <div class="ph-segment" style="background:#cc0000">0</div>
+          <div class="ph-segment" style="background:#e03000">1</div>
+          <div class="ph-segment" style="background:#e05800">2</div>
+          <div class="ph-segment" style="background:#e07800">3</div>
+          <div class="ph-segment" style="background:#e09800">4</div>
+          <div class="ph-segment" style="background:#c8a800">5</div>
+          <div class="ph-segment" style="background:#a8b800">6</div>
+          <div class="ph-segment" style="background:#66bb66">7</div>
+          <div class="ph-segment" style="background:#44aaaa">8</div>
+          <div class="ph-segment" style="background:#3388cc">9</div>
+          <div class="ph-segment" style="background:#2266bb">10</div>
+          <div class="ph-segment" style="background:#1144aa">11</div>
+          <div class="ph-segment" style="background:#003399">12</div>
+          <div class="ph-segment" style="background:#002288">13</div>
+          <div class="ph-segment" style="background:#001177">14</div>
+        </div>
+        <div class="ph-labels">
+          <span>◀ กรดแก่</span>
+          <span>กรดอ่อน ▸</span>
+          <span>กลาง (7)</span>
+          <span>◂ เบสอ่อน</span>
+          <span>เบสแก่ ▶</span>
+        </div>
+      </div>
+
+      <div class="ph-examples">
+        <div class="ph-ex" style="border:1px solid rgba(255,107,107,0.4)">
+          <div class="ph-num" style="color:var(--coral)">1–2</div>
+          <div>น้ำกรดในกระเพาะ<br>กรดแบตเตอรี่</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(255,209,102,0.4)">
+          <div class="ph-num" style="color:var(--gold)">3–4</div>
+          <div>น้ำส้มสายชู<br>น้ำมะนาว</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(255,209,102,0.4)">
+          <div class="ph-num" style="color:var(--gold)">5–6</div>
+          <div>กาแฟ<br>ฝนกรด</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(52,211,153,0.4)">
+          <div class="ph-num" style="color:var(--green)">7</div>
+          <div>น้ำบริสุทธิ์<br>(กลาง)</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(96,165,250,0.4)">
+          <div class="ph-num" style="color:var(--blue)">8–9</div>
+          <div>น้ำทะเล<br>เบกกิ้งโซดา</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(167,139,250,0.4)">
+          <div class="ph-num" style="color:var(--purple)">10–11</div>
+          <div>น้ำยาซักผ้า<br>แอมโมเนีย</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(96,165,250,0.4)">
+          <div class="ph-num" style="color:var(--blue)">12–14</div>
+          <div>โซดาไฟ<br>ปูนขาว</div>
+        </div>
+        <div class="ph-ex" style="border:1px solid rgba(96,165,250,0.4)">
+          <div class="ph-num" style="color:var(--teal)">4–8</div>
+          <div>เลือด (7.4)<br>น้ำลาย (6.5)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🌿 ตัวบ่งชี้กรด-เบส (Indicator)</h3>
+      <p>สารที่เปลี่ยนสีตามความเป็นกรด-เบส ใช้บอกว่าสารละลายนั้นเป็นกรด เบส หรือกลาง</p>
+      <table class="chem-table">
+        <thead><tr><th>ตัวบ่งชี้</th><th>ในกรด</th><th>กลาง</th><th>ในเบส</th><th>ช่วง pH</th></tr></thead>
+        <tbody>
+          <tr><td>ลิตมัส</td><td style="color:#ff6b6b">แดง</td><td>ม่วง</td><td style="color:#60a5fa">น้ำเงิน</td><td>5–8</td></tr>
+          <tr><td>ฟีนอฟทาลีน</td><td>ไม่มีสี</td><td>ไม่มีสี</td><td style="color:#a78bfa">ชมพู-แดง</td><td>8.2–10</td></tr>
+          <tr><td>เมทิลออเรนจ์</td><td style="color:#ff6b6b">แดง</td><td style="color:#ffd166">ส้ม</td><td style="color:#ffd166">เหลือง</td><td>3.1–4.4</td></tr>
+          <tr><td>น้ำกะหล่ำปูม่วง</td><td style="color:#ff6b6b">แดง-ชมพู</td><td>ม่วง</td><td style="color:#34d399">เขียว-เหลือง</td><td>0–14</td></tr>
+        </tbody>
+      </table>
+      <div class="highlight-box purple">
+        <strong>🧪 การทดลองง่ายๆ:</strong> น้ำกะหล่ำปูม่วงเป็นตัวบ่งชี้ธรรมชาติที่ทำได้เอง<br>
+        เติมน้ำส้มสายชู → เปลี่ยนเป็นสีชมพู-แดง (กรด)<br>
+        เติมเบกกิ้งโซดา → เปลี่ยนเป็นสีเขียว (เบส)
+      </div>
+    </div>
+
+    <!-- WORKSHEET S5 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">📋 ใบงานหลังเรียน <span class="quiz-badge">หัวข้อที่ 5</span></div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">1</span>สารละลายที่มีค่า pH = 9 มีสมบัติอย่างไร?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s5',0,1)"><span class="option-letter">ก</span>กรดแก่</div>
+          <div class="option" onclick="selectOpt(this,'s5',0,2)"><span class="option-letter">ข</span>กรดอ่อน</div>
+          <div class="option" onclick="selectOpt(this,'s5',0,3)"><span class="option-letter">ค</span>กลาง</div>
+          <div class="option" onclick="selectOpt(this,'s5',0,0)"><span class="option-letter">ง</span>เบสอ่อน</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">2</span>กระดาษลิตมัสสีน้ำเงินจุ่มในสารละลายแล้วเปลี่ยนเป็นสีแดง แสดงว่าสารละลายนั้นเป็นอย่างไร?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s5',1,0)"><span class="option-letter">ก</span>เป็นกรด</div>
+          <div class="option" onclick="selectOpt(this,'s5',1,1)"><span class="option-letter">ข</span>เป็นเบส</div>
+          <div class="option" onclick="selectOpt(this,'s5',1,2)"><span class="option-letter">ค</span>เป็นกลาง</div>
+          <div class="option" onclick="selectOpt(this,'s5',1,3)"><span class="option-letter">ง</span>บอกไม่ได้</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">3</span>สาร A มี pH = 4 และสาร B มี pH = 2 ข้อใดกล่าวถูกต้อง?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s5',2,1)"><span class="option-letter">ก</span>สาร A เป็นกรดแก่กว่าสาร B</div>
+          <div class="option" onclick="selectOpt(this,'s5',2,0)"><span class="option-letter">ข</span>สาร B เป็นกรดแก่กว่าสาร A</div>
+          <div class="option" onclick="selectOpt(this,'s5',2,2)"><span class="option-letter">ค</span>ทั้งสองเป็นเบสเท่ากัน</div>
+          <div class="option" onclick="selectOpt(this,'s5',2,3)"><span class="option-letter">ง</span>สาร A เป็นเบส สาร B เป็นกรด</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">4</span>ข้อใดเรียงลำดับจากกรดแก่ไปกรดอ่อนได้ถูกต้อง?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s5',3,1)"><span class="option-letter">ก</span>น้ำส้มสายชู → น้ำอัดลม → กรดเกลือ</div>
+          <div class="option" onclick="selectOpt(this,'s5',3,0)"><span class="option-letter">ข</span>กรดเกลือ → น้ำส้มสายชู → น้ำอัดลม</div>
+          <div class="option" onclick="selectOpt(this,'s5',3,2)"><span class="option-letter">ค</span>น้ำอัดลม → กรดเกลือ → น้ำส้มสายชู</div>
+          <div class="option" onclick="selectOpt(this,'s5',3,3)"><span class="option-letter">ง</span>น้ำอัดลม → น้ำส้มสายชู → กรดเกลือ</div>
+        </div>
+      </div>
+
+      <div class="open-question">
+        <div class="open-q-text"><span class="q-num">5</span>จงระบุ pH โดยประมาณ และบอกว่าเป็นกรด เบส หรือกลาง ของสาร 5 ชนิดในชีวิตประจำวัน พร้อมระบุสีที่เกิดขึ้นเมื่อทดสอบด้วยกระดาษลิตมัส</div>
+        <textarea class="open-answer" placeholder="เขียนตาราง: ชื่อสาร | pH | กรด/เบส/กลาง | สีลิตมัส..." style="min-height:120px"></textarea>
+        <div class="answer-hint">💡 ตัวอย่าง: มะนาว pH≈2 กรด ลิตมัสแดง | น้ำทะเล pH≈8 เบส ลิตมัสน้ำเงิน</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('s5',4); markDone('s5')">✅ ส่งใบงาน</button>
+      </div>
+      <div class="quiz-result" id="result-s5">
+        <div class="result-score" id="score-s5"></div>
+        <div class="result-label">คะแนน (4 ข้อปรนัย)</div>
+        <div class="result-msg" id="msg-s5"></div>
+        <div style="margin-top:16px">
+          <button class="btn btn-secondary" onclick="showPage('s6-page',document.getElementById('nav-s6'))">➡ หัวข้อถัดไป: การแยกสาร</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 6 ===================== -->
+  <div id="s6-page" class="section-page">
+    <div class="section-header">
+      <div class="section-icon-big" style="background:rgba(52,211,153,0.15)">⚗</div>
+      <div>
+        <h2>การแยกสาร</h2>
+        <p>เรียนรู้วิธีการแยกสารผสมออกจากกัน ด้วยเทคนิคต่างๆ ที่ใช้หลักการทางวิทยาศาสตร์</p>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🔧 วิธีการแยกสาร</h3>
+      <p>การเลือกวิธีแยกสารขึ้นอยู่กับ<strong>สมบัติของสารที่แตกต่างกัน</strong> เช่น ขนาดอนุภาค จุดเดือด ความสามารถในการละลาย ความหนาแน่น เป็นต้น</p>
+
+      <div class="method-grid">
+        <div class="method-card">
+          <div class="method-icon">🫙</div>
+          <h4>การกรอง (Filtration)</h4>
+          <p>แยกของแข็งออกจากของเหลวโดยใช้กระดาษกรองหรือตัวกลางที่มีรูพรุน</p>
+          <div style="margin-top:8px;font-size:12px;color:var(--teal)">ใช้กับ: สารแขวนลอย ตะกอน</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">🌡</div>
+          <h4>การกลั่น (Distillation)</h4>
+          <p>แยกสารผสมโดยอาศัยความแตกต่างของจุดเดือด ระเหยแล้วควบแน่นใหม่</p>
+          <div style="margin-top:8px;font-size:12px;color:var(--teal)">ใช้กับ: สารละลายที่ระเหยต่างกัน</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">💎</div>
+          <h4>การตกผลึก (Crystallization)</h4>
+          <p>ทำให้สารละลายระเหยน้ำออก จนสารที่ละลายอยู่ตกผลึกออกมา</p>
+          <div style="margin-top:8px;font-size:12px;color:var(--teal)">ใช้กับ: เกลือ น้ำตาล</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">🎨</div>
+          <h4>โครมาโทกราฟี (Chromatography)</h4>
+          <p>แยกสารผสมโดยอาศัยความสามารถในการละลายและการดูดซับที่แตกต่างกัน</p>
+          <div style="margin-top:8px;font-size:12px;color:var(--teal)">ใช้กับ: สีย้อม หมึก รงควัตถุ</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">🧲</div>
+          <h4>การใช้แม่เหล็ก (Magnetic Sep.)</h4>
+          <p>ใช้แม่เหล็กดึงดูดสารที่มีสมบัติแม่เหล็กออกจากสารผสม</p>
+          <div style="margin-top:8px;font-size:12px;color:var(--teal)">ใช้กับ: ผงเหล็กในทราย</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">🌀</div>
+          <h4>การตกตะกอน/เหวี่ยง (Centrifuge)</h4>
+          <p>แยกอนุภาคโดยอาศัยความแตกต่างของความหนาแน่นด้วยการหมุนเหวี่ยง</p>
+          <div style="margin-top:8px;font-size:12px;color:var(--teal)">ใช้กับ: เลือด คอลลอยด์</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>🔬 รายละเอียดการแยกสารที่สำคัญ</h3>
+      <table class="chem-table">
+        <thead>
+          <tr><th>วิธี</th><th>หลักการ</th><th>อุปกรณ์</th><th>ตัวอย่างการใช้จริง</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>การกรอง</strong></td>
+            <td>ขนาดอนุภาค</td>
+            <td>กระดาษกรอง ฟัลคอนเนล</td>
+            <td>กรองกากกาแฟ, กรองน้ำ</td>
+          </tr>
+          <tr>
+            <td><strong>การกลั่นอย่างง่าย</strong></td>
+            <td>จุดเดือดต่างกัน</td>
+            <td>ฟลาสก์ เครื่องควบแน่น</td>
+            <td>กลั่นน้ำจากน้ำเกลือ</td>
+          </tr>
+          <tr>
+            <td><strong>การกลั่นลำดับส่วน</strong></td>
+            <td>จุดเดือดใกล้เคียง</td>
+            <td>คอลัมน์กลั่น</td>
+            <td>กลั่นน้ำมันดิบ กลั่นแอลกอฮอล์</td>
+          </tr>
+          <tr>
+            <td><strong>การตกผลึก</strong></td>
+            <td>ความสามารถละลาย</td>
+            <td>จาน อ่างระเหย</td>
+            <td>ทำเกลือทะเล ทำน้ำตาลทราย</td>
+          </tr>
+          <tr>
+            <td><strong>TLC Chromatography</strong></td>
+            <td>การดูดซับ+ละลาย</td>
+            <td>แผ่น TLC ตัวทำละลาย</td>
+            <td>ตรวจยา แยกสีจากพืช</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box">
+        <strong>🌊 การแยกน้ำมันกับน้ำ:</strong> ใช้กรวยแยก (Separatory Funnel) อาศัยหลักความหนาแน่นต่างกัน<br>
+        น้ำมันลอยอยู่บน (ความหนาแน่นน้อยกว่า) → เปิดก๊อกล่างให้น้ำไหลออกก่อน
+      </div>
+
+      <div class="highlight-box gold">
+        <strong>🧪 Chromatography บนกระดาษ:</strong><br>
+        หยดสีหมึกลงบนกระดาษกรอง → จุ่มในน้ำเพียงเล็กน้อย<br>
+        น้ำจะพาสีต่างๆ เคลื่อนที่ขึ้นด้วยความเร็วต่างกัน → แยกเป็นแถบสีต่างๆ<br>
+        พิสูจน์ว่า "สีดำ" คือสารผสมของสีหลายสี!
+      </div>
+    </div>
+
+    <!-- WORKSHEET S6 -->
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <div class="quiz-title">📋 ใบงานหลังเรียน <span class="quiz-badge">หัวข้อที่ 6</span></div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">1</span>จะแยก "ผงเหล็ก" ออกจาก "ทราย" ควรใช้วิธีใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s6',0,1)"><span class="option-letter">ก</span>การกรอง</div>
+          <div class="option" onclick="selectOpt(this,'s6',0,2)"><span class="option-letter">ข</span>การตกผลึก</div>
+          <div class="option" onclick="selectOpt(this,'s6',0,3)"><span class="option-letter">ค</span>การกลั่น</div>
+          <div class="option" onclick="selectOpt(this,'s6',0,0)"><span class="option-letter">ง</span>การใช้แม่เหล็ก</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">2</span>การกลั่นน้ำมันดิบในโรงกลั่นน้ำมันอาศัยหลักการใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s6',1,1)"><span class="option-letter">ก</span>ความหนาแน่นต่างกัน</div>
+          <div class="option" onclick="selectOpt(this,'s6',1,2)"><span class="option-letter">ข</span>ขนาดอนุภาคต่างกัน</div>
+          <div class="option" onclick="selectOpt(this,'s6',1,0)"><span class="option-letter">ค</span>จุดเดือดของสารแต่ละชนิดต่างกัน</div>
+          <div class="option" onclick="selectOpt(this,'s6',1,3)"><span class="option-letter">ง</span>ความสามารถในการละลายน้ำต่างกัน</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">3</span>โครมาโทกราฟีแบบกระดาษสามารถนำไปใช้ในงานใดในชีวิตจริง?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s6',2,1)"><span class="option-letter">ก</span>แยกน้ำออกจากน้ำเกลือ</div>
+          <div class="option" onclick="selectOpt(this,'s6',2,2)"><span class="option-letter">ข</span>แยกผงเหล็กออกจากทราย</div>
+          <div class="option" onclick="selectOpt(this,'s6',2,0)"><span class="option-letter">ค</span>ตรวจวิเคราะห์สารพิษในอาหาร</div>
+          <div class="option" onclick="selectOpt(this,'s6',2,3)"><span class="option-letter">ง</span>กรองตะกอนออกจากน้ำโคลน</div>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-text"><span class="q-num">4</span>การทำนาเกลือสมุทรอาศัยวิธีการแยกสารใด?</div>
+        <div class="options">
+          <div class="option" onclick="selectOpt(this,'s6',3,1)"><span class="option-letter">ก</span>การกลั่น</div>
+          <div class="option" onclick="selectOpt(this,'s6',3,0)"><span class="option-letter">ข</span>การตกผลึก (ระเหยน้ำ)</div>
+          <div class="option" onclick="selectOpt(this,'s6',3,2)"><span class="option-letter">ค</span>การกรอง</div>
+          <div class="option" onclick="selectOpt(this,'s6',3,3)"><span class="option-letter">ง</span>โครมาโทกราฟี</div>
+        </div>
+      </div>
+
+      <div class="open-question">
+        <div class="open-q-text"><span class="q-num">5</span>สมมติว่ามีส่วนผสมของ ทราย + เกลือ + ผงเหล็ก จงออกแบบขั้นตอนการแยกสารทั้งสามออกจากกัน โดยระบุวิธีที่ใช้และหลักการในแต่ละขั้นตอน</div>
+        <textarea class="open-answer" placeholder="เขียนขั้นตอนการแยกสาร..." style="min-height:120px"></textarea>
+        <div class="answer-hint">💡 แนวคิด: ขั้น 1 ใช้แม่เหล็กแยกเหล็กออก → ขั้น 2 เติมน้ำแล้วกรองแยกทราย → ขั้น 3 ระเหยน้ำเพื่อได้เกลือ</div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn btn-primary" onclick="submitQuiz('s6',4); markDone('s6')">✅ ส่งใบงาน</button>
+      </div>
+      <div class="quiz-result" id="result-s6">
+        <div class="result-score" id="score-s6"></div>
+        <div class="result-label">คะแนน (4 ข้อปรนัย)</div>
+        <div class="result-msg" id="msg-s6"></div>
+        <div style="margin-top:16px">
+          <button class="btn btn-gold" onclick="showPage('complete-page',document.getElementById('nav-complete'))">🏆 ดูสรุปผลการเรียน!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== COMPLETE ===================== -->
+  <div id="complete-page" class="section-page" style="max-width:700px">
+    <div style="text-align:center;padding:40px 0">
+      <div style="font-size:72px;margin-bottom:20px">🎉</div>
+      <h2 style="font-size:32px;font-weight:800;margin-bottom:12px">เรียนจบบทที่ 1 แล้ว!</h2>
+      <p style="color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:32px">ขอแสดงความยินดี! คุณผ่านครบทุกหัวข้อในบทที่ 1 สารและสมบัติของสาร</p>
+      <div class="score-cards">
+        <div class="score-card">
+          <div class="sc-num" id="total-mc">–</div>
+          <div class="sc-label">คะแนนรวม (ปรนัย)</div>
+        </div>
+        <div class="score-card">
+          <div class="sc-num" id="topics-done">0/6</div>
+          <div class="sc-label">หัวข้อที่เรียนจบ</div>
+        </div>
+        <div class="score-card">
+          <div class="sc-num" id="pre-score-show">–</div>
+          <div class="sc-label">คะแนนก่อนเรียน</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>📚 สิ่งที่เรียนในบทนี้</h3>
+      <table class="chem-table">
+        <thead><tr><th>หัวข้อ</th><th>แนวคิดหลัก</th></tr></thead>
+        <tbody>
+          <tr><td>⚛ ธาตุ/สารประกอบ/สารผสม</td><td>ธาตุ = อะตอมเดียว | สารประกอบ = 2+ ธาตุรวมทางเคมี | สารผสม = ผสมโดยไม่เกิดปฏิกิริยา</td></tr>
+          <tr><td>🔬 การจำแนกสาร</td><td>เนื้อเดียว (สารละลาย, อัลลอย) vs เนื้อผสม (คอลลอยด์, สารแขวนลอย)</td></tr>
+          <tr><td>🧲 สมบัติของสาร</td><td>กายภาพ = วัดได้โดยตรง | เคมี = แสดงออกเมื่อทำปฏิกิริยา</td></tr>
+          <tr><td>🔥 การเปลี่ยนแปลง</td><td>กายภาพ = ไม่มีสารใหม่ | เคมี = มีสารใหม่เกิดขึ้น</td></tr>
+          <tr><td>🧪 กรด-เบส pH</td><td>pH 0-7 กรด | pH 7 กลาง | pH 7-14 เบส</td></tr>
+          <tr><td>⚗ การแยกสาร</td><td>กรอง กลั่น ตกผลึก โครมาโทกราฟี แม่เหล็ก ฯลฯ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn btn-primary" onclick="showPage('home-page',document.getElementById('nav-home'))">🏠 กลับหน้าแรก</button>
+      <button class="btn btn-secondary" onclick="showPage('pretest-page',document.getElementById('nav-pretest'))" style="margin-left:12px">📝 ทำแบบทดสอบอีกครั้ง</button>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<script>
+// ---- STATE ----
+const answers = {
+  pre:  [2,1,2,0,1,1,2,1,2,2], // correct answer index for each question (0-based from options order)
+  s1:   [2,1,1,1],
+  s2:   [1,2,1,1],
+  s3:   [2,1,2,1],
+  s4:   [3,2,0,1],
+  s5:   [3,0,1,1],
+  s6:   [3,2,2,1]
+};
+
+// Map correct answer index (0-3) to which option element (0-3 in DOM) 
+// The selectOpt passes the answer index from the onclick, where 0=correct and 1,2,3=wrong
+// Actually, let me reconfigure: in selectOpt(this, quiz, qIndex, isCorrect)
+// where isCorrect=0 means correct, 1,2,3 means wrong
+
+const userAnswers = {};
+const doneTopics = {};
+const quizScores = {};
+
+function selectOpt(el, quiz, qIdx, isCorrect) {
+  const qKey = quiz + '-' + qIdx;
+  if (userAnswers[qKey] !== undefined) return; // already answered
+  
+  const opts = el.parentElement.querySelectorAll('.option');
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  
+  if (isCorrect === 0) {
+    el.classList.add('correct');
+    userAnswers[qKey] = true;
+  } else {
+    el.classList.add('wrong');
+    userAnswers[qKey] = false;
+    // Show correct answer
+    opts.forEach(o => {
+      if (o.getAttribute('onclick') && o.getAttribute('onclick').includes(',0)')) {
+        o.classList.add('correct');
+      }
+    });
+  }
+}
+
+function submitQuiz(quiz, total) {
+  let score = 0;
+  for (let i = 0; i < total; i++) {
+    if (userAnswers[quiz + '-' + i] === true) score++;
+  }
+  
+  quizScores[quiz] = score;
+  
+  const pct = Math.round((score/total)*100);
+  const scoreEl = document.getElementById('score-' + quiz);
+  const msgEl = document.getElementById('msg-' + quiz);
+  const resultEl = document.getElementById('result-' + quiz);
+  
+  scoreEl.textContent = score + '/' + total;
+  scoreEl.style.color = pct >= 75 ? 'var(--green)' : pct >= 50 ? 'var(--gold)' : 'var(--coral)';
+  
+  let msg = '';
+  if (pct === 100) msg = '🌟 เยี่ยมมาก! ตอบถูกทุกข้อ!';
+  else if (pct >= 75) msg = '✅ ดีมาก! เข้าใจเนื้อหาได้ดี';
+  else if (pct >= 50) msg = '👍 พอใช้ได้ ลองทบทวนส่วนที่ผิดดูนะ';
+  else msg = '📖 ควรกลับไปทบทวนเนื้อหาส่วนนี้ใหม่อีกครั้ง';
+  
+  msgEl.textContent = msg;
+  resultEl.style.display = 'block';
+  
+  updateSummary();
+}
+
+function markDone(topic) {
+  doneTopics[topic] = true;
+  const navEl = document.getElementById('nav-' + topic);
+  if (navEl) navEl.classList.add('done');
+  
+  const count = Object.keys(doneTopics).length;
+  document.getElementById('progressText').textContent = count + ' / 6 หัวข้อ';
+  document.getElementById('navProgress').style.width = (count/6*100) + '%';
+  
+  updateSummary();
+}
+
+function updateSummary() {
+  const topicScores = ['s1','s2','s3','s4','s5','s6'];
+  let total = 0;
+  topicScores.forEach(t => { if (quizScores[t] !== undefined) total += quizScores[t]; });
+  
+  const el = document.getElementById('total-mc');
+  if (el) el.textContent = total + '/24';
+  
+  const td = document.getElementById('topics-done');
+  if (td) td.textContent = Object.keys(doneTopics).length + '/6';
+  
+  const ps = document.getElementById('pre-score-show');
+  if (ps && quizScores['pre'] !== undefined) ps.textContent = quizScores['pre'] + '/10';
+}
+
+// ---- NAVIGATION ----
+let currentPage = 'home-page';
+
+function showPage(pageId, navEl) {
+  document.getElementById(currentPage).classList.remove('active');
+  document.getElementById(currentPage).style.display = 'none';
+  
+  // Remove active from all nav items
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  
+  currentPage = pageId;
+  const page = document.getElementById(pageId);
+  page.style.display = 'block';
+  page.classList.add('active');
+  
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// Init
+document.getElementById('home-page').classList.add('active');
+
+// ---- FLOATING MOLECULES ----
+const bg = document.getElementById('molBg');
+const colors = ['#00e5cc','#ffd166','#ff6b6b','#a78bfa','#60a5fa','#34d399'];
+for (let i = 0; i < 18; i++) {
+  const mol = document.createElement('div');
+  mol.className = 'mol';
+  const size = 20 + Math.random() * 80;
+  mol.style.cssText = `
+    width:${size}px; height:${size}px;
+    background:${colors[Math.floor(Math.random()*colors.length)]};
+    left:${Math.random()*100}%;
+    animation-duration:${12+Math.random()*20}s;
+    animation-delay:-${Math.random()*20}s;
+    border-radius:${Math.random()>0.5?'50%':'20%'};
+  `;
+  bg.appendChild(mol);
+}
+</script>
+</body>
+</html>
